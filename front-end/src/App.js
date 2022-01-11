@@ -4,11 +4,31 @@ import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import ProductPage from "./pages/ProductPage";
 import Navbar from "./components/Navbar";
+import Backdrop from "./components/Backdrop";
+import SideDrawer from "./components/SideDrawer";
+import { useState } from "react";
+
 function App() {
+  const [sideToggle, setSideToggle] = useState(false);
   return (
     <Router>
-      <Navbar />
-
+      <Navbar
+        click={() => {
+          setSideToggle(true);
+        }}
+      />
+      <Backdrop
+        show={sideToggle}
+        click={() => {
+          setSideToggle(false);
+        }}
+      />
+      <SideDrawer
+        show={sideToggle}
+        click={() => {
+          setSideToggle(false);
+        }}
+      />
       <main>
         <Routes>
           <Route exact path="/" element={<Home />} />
