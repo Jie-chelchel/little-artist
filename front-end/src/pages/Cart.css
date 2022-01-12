@@ -1,0 +1,52 @@
+.cartitem {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 1fr 1fr;
+  gap: 8px;
+  border-radius: 2px;
+  place-items: center;
+  background-color: whitesmoke;
+}
+
+.cartitem__name {
+  text-decoration: none;
+  color: #171717;
+}
+
+.cartitem__name:hover {
+  color: red;
+}
+
+.cartitem__select {
+  padding: 10px 18px;
+}
+
+.cartitem__deletebtn {
+  padding: 10px 18px;
+  color: red;
+  background-color: #f4f4f4;
+  border: 1px solid #171717;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.cartitem__deletebtn:hover,
+.cartitem__deletebtn:focus,
+.cartitem__deletebtn:active {
+  background-color: black;
+  transform: scale(1.1);
+}
+
+@media (max-width: 700px) {
+  .cartitem__name {
+    font-size: 0.8rem;
+  }
+  .cartitem__select,
+  .cartitem__deletebtn {
+    padding: 6px 8px;
+  }
+  .cartitem__price {
+    font-size: 0.7rem;
+  }
+}

@@ -81,6 +81,8 @@
 
   .left__image {
     flex: 1;
+    width: 350px;
+    margin: 1px auto;
   }
 
   .left__info {
