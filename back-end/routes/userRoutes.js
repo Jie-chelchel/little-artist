@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const userCtrl = require("../controller/userControllers");
 
-router.get("/register", (req, res) => {
-  res.json({ msg: "TEST ROUTER" });
-});
+router.post("/register", userCtrl.register);
 
 module.exports = router;
