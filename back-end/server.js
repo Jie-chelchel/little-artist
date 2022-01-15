@@ -6,10 +6,11 @@ const connectDB = require("./config/db");
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
-
+const upload = require("./routes/upload");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
+const req = require("express/lib/request");
 
 connectDB();
 const app = express();
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/upload", upload);
 
 app.use("/user", userRoutes);
 app.listen(PORT, () => {
