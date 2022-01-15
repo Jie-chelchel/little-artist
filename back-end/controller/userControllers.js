@@ -1,5 +1,7 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
 const userCtrl = {
   register: async (req, res) => {
     try {
@@ -23,11 +25,31 @@ const userCtrl = {
       await newUser.save();
 
       //Create jsonwebtoken to authentication
-      res.json(newUser);
+      const asscesstoken = createAccessToken({ id: newUser._id });
+      const refreshtoken = createRefreshToken({ id: newUser._id });
+
+      res.cookie("refreshtoken", refreshtoken, {
+        httpOnly: true,
+        path: "/user/refresh_token",
+      });
+      res.json({ asscesstoken });
+      //   res.json({ msg: "Register Success" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
   },
+  refreshToken: (req, res) => {
+    const rf_token = req.cookies.refreshtoken;
+    res.json({ rf_token });
+  },
+};
+
+const createAccessToken = (user) => {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
+};
+
+const createRefreshToken = (user) => {
+  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
 };
 
 module.exports = userCtrl;
