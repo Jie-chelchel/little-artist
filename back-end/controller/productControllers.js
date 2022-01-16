@@ -3,12 +3,12 @@ const Products = require("../models/productModel");
 //filter, sorting and paginating
 
 class APIfeatures {
-  constructor(query, querySting) {
+  constructor(query, queryString) {
     this.query = query;
-    this.querySting = querySting;
+    this.queryString = queryString;
   }
   filtering() {
-    const queryObj = { ...this.querySting };
+    const queryObj = { ...this.queryString };
     // console.log({queryObj});
     const excludedFields = ["page", "sort", "limit"];
     excludedFields.forEach((el) => delete queryObj[el]);
@@ -23,17 +23,41 @@ class APIfeatures {
     return this;
   }
 
-  sorting() {}
+  sorting() {
+    if (this.queryString.sort) {
+      const sortBy = this.queryString.sort.split(",").join(" ");
+      console.log(sortBy);
+      //if by price, add - sign in front of price will be desc.
+      this.query = this.query.sort(sortBy);
+    } else {
+      this.query = this.query.sort("-createdAt");
+    }
+    return this;
+  }
 
-  paginating() {}
+  paginating() {
+    const page = this.queryString.page * 1 || 1;
+    const limit = this.queryString.limit * 1 || 3;
+    const skip = (page - 1) * limit;
+    this.query = this.query.skip(skip).limit(limit);
+
+    return this;
+  }
 }
 
 const productCtrl = {
   getProducts: async (req, res) => {
     try {
-      const features = new APIfeatures(Products.find(), req.query).filtering();
+      const features = new APIfeatures(Products.find(), req.query)
+        .filtering()
+        .sorting()
+        .paginating();
       const products = await features.query;
-      res.json(products);
+      res.json({
+        status: "success",
+        result: products.length,
+        products: products,
+      });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
