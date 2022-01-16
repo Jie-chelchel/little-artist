@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api/upload", upload);
+app.use("/api", upload);
 
 app.use("/user", userRoutes);
 app.listen(PORT, () => {
