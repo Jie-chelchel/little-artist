@@ -1,14 +1,44 @@
 const Products = require("../models/productModel");
 
+//filter, sorting and paginating
+
+class APIfeatures {
+  constructor(query, querySting) {
+    this.query = query;
+    this.querySting = querySting;
+  }
+  filtering() {
+    const queryObj = { ...this.querySting };
+    // console.log({queryObj});
+    const excludedFields = ["page", "sort", "limit"];
+    excludedFields.forEach((el) => delete queryObj[el]);
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(
+      /\b(gte|gt|lt|lte|regex)\b/g,
+      (match) => "$" + match
+    );
+    // console.log({queryObj}, {queryStr});
+    // console.log("here", JSON.parse(queryStr));
+    this.query.find(JSON.parse(queryStr));
+    return this;
+  }
+
+  sorting() {}
+
+  paginating() {}
+}
+
 const productCtrl = {
   getProducts: async (req, res) => {
     try {
-      const products = await Products.find();
+      const features = new APIfeatures(Products.find(), req.query).filtering();
+      const products = await features.query;
       res.json(products);
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
   },
+
   createProduct: async (req, res) => {
     try {
       const {
@@ -40,6 +70,7 @@ const productCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
+
   deleteProduct: async (req, res) => {
     try {
       await Products.findByIdAndDelete(req.params.id);
@@ -48,6 +79,7 @@ const productCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
+
   updateProduct: async (req, res) => {
     try {
       const {
