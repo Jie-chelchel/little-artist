@@ -4,12 +4,33 @@
   box-sizing: border-box;
 }
 
-body {
+/* body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #f4f4f4;
+} */
+
+.App {
+  max-width: 1230px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-shadow: 0 0 35px #eee;
 }
 
-img {
-  width: 100%;
-  object-fit: contain;
+a {
+  text-decoration: none;
 }
+
+ul li {
+  list-style: none;
+}
+
+button {
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* -----header------- */
+@import url("./components/headers/Header.css");

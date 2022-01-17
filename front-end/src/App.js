@@ -7,8 +7,10 @@ function App() {
   return (
     <DataProvider>
       <Router>
-        <Headers />
-        <MainPages />
+        <div className="App">
+          <Headers />
+          <MainPages />
+        </div>
       </Router>
     </DataProvider>
   );
