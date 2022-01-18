@@ -6,7 +6,7 @@ function ProductsApi() {
 
   const getProducts = async () => {
     const res = await axios.get("http://localhost:8000/api/products");
-    console.log(res.data);
+    setProducts(res.data.products);
   };
 
   useEffect(() => {
