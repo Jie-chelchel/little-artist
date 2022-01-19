@@ -62,3 +62,10 @@
   background-color: rgb(32, 172, 172);
   margin-right: 5px;
 }
+#btn_buy:hover {
+  transform: scale(1.05);
+}
+
+#btn_view:hover {
+  transform: scale(1.05);
+}
