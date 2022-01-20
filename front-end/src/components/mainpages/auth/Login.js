@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import "./login.css";
 
 function Login() {
   const [user, setUser] = useState({
@@ -28,6 +29,7 @@ function Login() {
   return (
     <div className="login-page">
       <form onSubmit={loginSubmit}>
+        <h2>Login</h2>
         <input
           type="email"
           name="email"
@@ -44,7 +46,7 @@ function Login() {
           required
           onChange={onChangeInput}
         />
-        <div>
+        <div className="btns">
           <button type="submit">Login</button>
           <Link to="/register"> Register</Link>
         </div>
