@@ -30,7 +30,7 @@ const userCtrl = {
 
       res.cookie("refreshtoken", refreshtoken, {
         httpOnly: true,
-        secure: false,
+        // secure: false,
         path: "/user/refresh_token",
       });
       res.json({ asscesstoken });
@@ -54,7 +54,7 @@ const userCtrl = {
 
       res.cookie("refreshtoken", refreshtoken, {
         httpOnly: true,
-        secure: false,
+        // secure: false,
         path: "/user/refresh_token",
       });
       res.json({ asscesstoken });
@@ -86,8 +86,6 @@ const userCtrl = {
 
         res.json({ accesstoken });
       });
-
-      res.json({ rf_token });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

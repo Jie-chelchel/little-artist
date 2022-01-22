@@ -10,14 +10,15 @@ function Login() {
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    console.log(e.target);
     setUser({ ...user, [name]: value });
   };
   const loginSubmit = async (e) => {
-    console.log(user);
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/user/login", { ...user });
+      await axios.post("http://localhost:8000/user/login", {
+        ...user,
+      });
+
       localStorage.setItem("firstLogin", true);
       window.location.href = "/";
     } catch (err) {

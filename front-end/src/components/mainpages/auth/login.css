@@ -1,0 +1,48 @@
+.login-page {
+  width: 80%;
+  background-color: lightseagreen;
+  margin: 30px auto;
+  color: rgb(20, 19, 19);
+}
+
+.login-page form {
+  width: 60%;
+  margin: 5px auto;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 50px;
+}
+
+.login-page form input {
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+  margin-top: 5px;
+  font-size: 15px;
+}
+
+.btns {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btns button {
+  background-color: rgb(11, 214, 214);
+  padding: 3px 13px;
+  border-radius: 5px;
+}
+
+.btns a {
+  background-color: rgb(11, 214, 214);
+  padding: 3px 13px;
+  border-radius: 5px;
+  color: rgb(27, 27, 27);
+}
+.btns button:hover {
+  transform: scale(1.1);
+}
+
+.btns aside:hover {
+  transform: scale(1.1);
+}
