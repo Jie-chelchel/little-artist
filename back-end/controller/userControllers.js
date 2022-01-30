@@ -30,7 +30,7 @@ const userCtrl = {
 
       res.cookie("refreshtoken", refreshtoken, {
         httpOnly: true,
-        secure: false,
+        // secure: false,
         path: "/user/refresh_token",
       });
       res.json({ asscesstoken });
@@ -54,7 +54,7 @@ const userCtrl = {
 
       res.cookie("refreshtoken", refreshtoken, {
         httpOnly: true,
-        secure: false,
+        // secure: false,
         path: "/user/refresh_token",
       });
       res.json({ asscesstoken });
@@ -72,10 +72,11 @@ const userCtrl = {
     }
   },
 
-  refreshToken: (req, res) => {
+  refreshToken: async (req, res) => {
     try {
-      const rf_token = req.cookies.refreshtoken;
-
+      console.log(req);
+      const rf_token = await req.cookies.refreshtoken;
+      console.log(rf_token);
       if (!rf_token)
         return res.status(400).json({ msg: "Please Login or Register" });
       jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -86,8 +87,6 @@ const userCtrl = {
 
         res.json({ accesstoken });
       });
-
-      res.json({ rf_token });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

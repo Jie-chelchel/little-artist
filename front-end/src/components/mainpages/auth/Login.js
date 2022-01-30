@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
 
 function Login() {
+  let history = useHistory();
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -11,16 +12,19 @@ function Login() {
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    console.log(e.target);
     setUser({ ...user, [name]: value });
   };
   const loginSubmit = async (e) => {
-    console.log(user);
     e.preventDefault();
+    console.log(user.email);
+
     try {
-      await axios.post("http://localhost:8000/user/login", { ...user });
+      const res = await axios.post("http://localhost:8000/user/login", {
+        ...user,
+      });
+      console.log(res);
       localStorage.setItem("firstLogin", true);
-      window.location.href = "/";
+      history.push("/");
     } catch (err) {
       alert(err.response.data.msg);
     }
