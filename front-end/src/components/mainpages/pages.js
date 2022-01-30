@@ -3,21 +3,21 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Cart from "./cart/Cart";
 import Products from "./products/Products";
-import { Routes, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import NotFound from "./utils/notFound/Notfound";
 import ProductDetail from "./productDetail/ProductDetail";
 
 function MainPages() {
   return (
-    <Routes>
-      <Route path="/" exact element={<Products />} />
-      <Route path="/productdetail/:id" exact element={<ProductDetail />} />
-      <Route path="/login" exact element={<Login />} />
-      <Route path="/register" exact element={<Register />} />
-      <Route path="/cart" exact element={<Cart />} />
+    <Switch>
+      <Route path="/" exact component={Products} />
+      <Route path="/productdetail/:id" exact component={ProductDetail} />
+      <Route path="/login" exact component={Login} />
+      <Route path="/register" exact component={Register} />
+      <Route path="/cart" exact component={Cart} />
 
-      <Route path="*" exact element={<NotFound />} />
-    </Routes>
+      <Route path="*" exact component={NotFound} />
+    </Switch>
   );
 }
 

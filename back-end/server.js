@@ -22,13 +22,13 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
-  res.send("Hello");
-});
 app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api", upload);
 app.use("/user", userRoutes);
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

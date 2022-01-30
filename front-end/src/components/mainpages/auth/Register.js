@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 
 function Register() {
+  let history = useHistory();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -11,16 +12,16 @@ function Register() {
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    console.log(e.target);
     setUser({ ...user, [name]: value });
   };
   const registerSubmit = async (e) => {
-    console.log(user);
     e.preventDefault();
+    console.log("kk");
     try {
       await axios.post("http://localhost:8000/user/register", { ...user });
+
       localStorage.setItem("firstLogin", true);
-      window.location.href = "/";
+      history.push("/");
     } catch (err) {
       alert(err.response.data.msg);
     }
