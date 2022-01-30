@@ -6,7 +6,17 @@ const userCtrl = {
   register: async (req, res) => {
     try {
       const { name, email, password } = req.body;
+
+      if (!name || !email || !password)
+        return res.status(400).json({ msg: "Please fill in all fields" });
+
+      if (!validateEmail(email)) {
+        console.log(validateEmail(email));
+        return res.status(400).json({ msg: "Invalid email" });
+      }
+
       const user = await Users.findOne({ email });
+
       if (user)
         return res.status(400).json({ msg: "The email already exists" });
       if (password.length < 6)
@@ -22,18 +32,21 @@ const userCtrl = {
         password: passwordHash,
       });
       // save user to mongoDB
+
+      // const activation_token = createActivationToken(newUser);
+      // console.log(activation_token);
       await newUser.save();
 
       //Create jsonwebtoken to authentication
-      const asscesstoken = createAccessToken({ id: newUser._id });
-      const refreshtoken = createRefreshToken({ id: newUser._id });
+      // const asscesstoken = createAccessToken({ id: newUser._id });
+      // const refreshtoken = createRefreshToken({ id: newUser._id });
 
-      res.cookie("refreshtoken", refreshtoken, {
-        httpOnly: true,
-        // secure: false,
-        path: "/user/refresh_token",
-      });
-      res.json({ asscesstoken });
+      // res.cookie("refreshtoken", refreshtoken, {
+      //   httpOnly: true,
+      //   // secure: false,
+      //   path: "/user/refresh_token",
+      // });
+      // res.json({ asscesstoken });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
@@ -103,12 +116,28 @@ const userCtrl = {
   },
 };
 
-const createAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
+const validateEmail = (email) => {
+  return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
 };
 
-const createRefreshToken = (user) => {
-  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+const createActivationToken = (payload) => {
+  return jwt.sign(payload, process.env.ACTIVATION_TOKEN_SECRET, {
+    expiresIn: "5m",
+  });
+};
+
+const createAccessToken = (payload) => {
+  return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1d",
+  });
+};
+
+const createRefreshToken = (payload) => {
+  return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
 };
 
 module.exports = userCtrl;
