@@ -2,6 +2,8 @@ const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const { CLIENT_URL } = process.env;
+
 const userCtrl = {
   register: async (req, res) => {
     try {
@@ -26,27 +28,20 @@ const userCtrl = {
 
       //password encryption
       const passwordHash = await bcrypt.hash(password, 10);
-      const newUser = new Users({
+      const newUser = {
         name,
         email,
         password: passwordHash,
-      });
+      };
       // save user to mongoDB
 
-      // const activation_token = createActivationToken(newUser);
-      // console.log(activation_token);
-      await newUser.save();
+      const activation_token = createActivationToken(newUser);
 
-      //Create jsonwebtoken to authentication
-      // const asscesstoken = createAccessToken({ id: newUser._id });
-      // const refreshtoken = createRefreshToken({ id: newUser._id });
-
-      // res.cookie("refreshtoken", refreshtoken, {
-      //   httpOnly: true,
-      //   // secure: false,
-      //   path: "/user/refresh_token",
-      // });
-      // res.json({ asscesstoken });
+      const url = `${CLIENT_URL}/user/activate/${activation_token}`;
+      sendMail(email, url);
+      res.json({
+        msg: "Register Success! Please activate your account to start!",
+      });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

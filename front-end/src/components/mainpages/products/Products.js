@@ -6,7 +6,6 @@ import ProductItem from "../utils/productItem/ProductItem";
 function Products() {
   const state = useContext(GlobalState);
   const [products] = state.productsApi.products;
-
   return (
     <>
       <div className="products">

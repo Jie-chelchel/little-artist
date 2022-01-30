@@ -16,15 +16,12 @@ function Login() {
   };
   const loginSubmit = async (e) => {
     e.preventDefault();
-    console.log(user.email);
-
     try {
-      const res = await axios.post("http://localhost:8000/user/login", {
+      await axios.post("http://localhost:8000/user/login", {
         ...user,
       });
-      console.log(res);
       localStorage.setItem("firstLogin", true);
-      history.push("/");
+      window.location.href = "/";
     } catch (err) {
       alert(err.response.data.msg);
     }

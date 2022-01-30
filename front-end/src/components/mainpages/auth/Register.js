@@ -16,7 +16,6 @@ function Register() {
   };
   const registerSubmit = async (e) => {
     e.preventDefault();
-    console.log("kk");
     try {
       await axios.post("http://localhost:8000/user/register", { ...user });
 
