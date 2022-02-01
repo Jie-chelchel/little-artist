@@ -1,6 +1,7 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const sendMail = require("./sendMail");
 
 const { CLIENT_URL } = process.env;
 
@@ -44,6 +45,19 @@ const userCtrl = {
       });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  activateEmail: async (req, res) => {
+    try {
+      const { activation_token } = req.body;
+      const user = jwt.verify(
+        activation_token,
+        process.env.ACTIVATION_TOKEN_SECRET
+      );
+      console.log(user);
+    } catch (err) {
+      return res.status(500).json({ msg: "err.message" });
     }
   },
 
