@@ -2,6 +2,7 @@ const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendMail = require("./sendMail");
+const sendEmail = require("./sendMail");
 
 const { CLIENT_URL } = process.env;
 
@@ -39,7 +40,7 @@ const userCtrl = {
       const activation_token = createActivationToken(newUser);
 
       const url = `${CLIENT_URL}/user/activate/${activation_token}`;
-      sendMail(email, url);
+      sendMail(email, url, "Verify your email address");
       res.json({
         msg: "Register Success! Please activate your account to start!",
       });
@@ -56,6 +57,19 @@ const userCtrl = {
         process.env.ACTIVATION_TOKEN_SECRET
       );
       console.log(user);
+      const { name, email, password } = user;
+
+      const check = await Users.findOne({ email });
+      if (check)
+        return res.status(400).json({ msg: "The email already exists" });
+
+      const newUser = new Users({
+        name,
+        email,
+        password,
+      });
+      await newUser.save();
+      res.json({ msg: "Account has be activated!" });
     } catch (err) {
       return res.status(500).json({ msg: "err.message" });
     }
@@ -71,15 +85,49 @@ const userCtrl = {
       if (!isMatch) return res.status(400).json({ msg: "Incorrect password." });
 
       //if login success, create access token and refresh token
-      const asscesstoken = createAccessToken({ id: user._id });
-      const refreshtoken = createRefreshToken({ id: user._id });
 
-      res.cookie("refreshtoken", refreshtoken, {
+      console.log(user);
+      const refresh_token = createRefreshToken({ id: user._id });
+      res.cookie("refreshtoken", refresh_token, {
         httpOnly: true,
-        // secure: false,
         path: "/user/refresh_token",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      res.json({ asscesstoken });
+
+      res.json({ msg: "logged in" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  getAccessToken: (req, res) => {
+    try {
+      const rf_token = req.cookies.refreshtoken;
+      if (!rf_token) return res.status(400).json({ msg: "Please login now!" });
+      jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) return res.status(400).json({ msg: "Please login now!" });
+        const access_token = createAccessToken({ id: user._id });
+        res.json({ access_token });
+        console.log(user);
+      });
+    } catch (err) {
+      res.status(500).json({ msg: err.message });
+    }
+  },
+
+  forgotPassword: async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await Users.findOne({ email });
+      if (!user)
+        return res
+          .status(400)
+          .json({ msg: "This email doesn't has an account with it" });
+
+      const access_token = createAccessToken({ id: user._id });
+      const url = `${CLIENT_URL}/user/reset/${access_token}`;
+      sendEmail(email, url, "Reset your password");
+      res.json({ msg: "Reset password, please check you email" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
@@ -89,26 +137,6 @@ const userCtrl = {
     try {
       res.clearCookie("refreshtoken", { path: "/user/refresh_token" });
       return res.json({ msg: "Logged out" });
-    } catch (err) {
-      return res.status(500).json({ msg: err.message });
-    }
-  },
-
-  refreshToken: async (req, res) => {
-    try {
-      console.log(req);
-      const rf_token = await req.cookies.refreshtoken;
-      console.log(rf_token);
-      if (!rf_token)
-        return res.status(400).json({ msg: "Please Login or Register" });
-      jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-        if (err)
-          return res.status(400).json({ msg: "Please Login or Register" });
-
-        const accesstoken = createAccessToken({ id: user.id });
-
-        res.json({ accesstoken });
-      });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

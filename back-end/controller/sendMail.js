@@ -21,7 +21,7 @@ const oauth2Client = new google.auth.OAuth2(
 
 //send mail
 
-const sendEmail = (to, url) => {
+const sendEmail = (to, url, txt) => {
   oauth2Client.setCredentials({
     refresh_token: MAILING_SERVICE_REFRESH_TOKEN,
   });
@@ -44,10 +44,10 @@ const sendEmail = (to, url) => {
     to: to,
     subject: "little artists",
     html: `
-       <div>
-
+       <div style = "max-width: 700px; margin:auto; border:10px solid #ddd; padding:50px">
+       <h2 style= "  text-align: center; text-transform: uppercase; color:teal;"> Welcome to the Little Artists </h2>
         <p> Please click the button below to validate your email address.</p>
-        <a href = ${url} />
+        <a href = ${url} style="background: crimson;text-decoration:none; color:white; padding: 15px 25px;">${txt}</a>
         <p> You can also click on the link below</p>
 
         <div>${url} </div>
