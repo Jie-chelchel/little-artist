@@ -133,6 +133,23 @@ const userCtrl = {
     }
   },
 
+  resetPassword: async (req, res) => {
+    try {
+      const { password } = req.body;
+      const passwordHash = await bcrypt.hash(password, 12);
+      console.log(req.user);
+      await Users.findOneAndUpdate(
+        { _id: req.user.id },
+        {
+          password: passwordHash,
+        }
+      );
+      res.json({ msg: "Password successfully changed" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
   logout: async (req, res) => {
     try {
       res.clearCookie("refreshtoken", { path: "/user/refresh_token" });
