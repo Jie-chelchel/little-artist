@@ -91,6 +91,7 @@ const userCtrl = {
         path: "/user/refresh_token",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
+
       res.json({ msg: "logged in" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -104,8 +105,6 @@ const userCtrl = {
       jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) return res.status(400).json({ msg: "Please login now!" });
         const access_token = createAccessToken({ id: user._id });
-        console.log("from getAccessToken", user);
-
         res.json({ access_token });
       });
     } catch (err) {
@@ -117,7 +116,6 @@ const userCtrl = {
     try {
       const { email } = req.body;
       const user = await Users.findOne({ email });
-      console.log("forgot", user);
       if (!user)
         return res
           .status(400)
@@ -136,14 +134,13 @@ const userCtrl = {
     try {
       const { password } = req.body;
       const passwordHash = await bcrypt.hash(password, 12);
-      console.log("from reset", req.user);
+      console.log(req.user);
       await Users.findOneAndUpdate(
         { _id: req.user.id },
         {
           password: passwordHash,
         }
       );
-
       res.json({ msg: "Password successfully changed" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -161,7 +158,6 @@ const userCtrl = {
 
   getUserInfo: async (req, res) => {
     try {
-      console.log(req);
       const user = await Users.findById(req.user.id).select("-password");
       // if (!user) return res.status(400).json({ msg: "User does not exist" });
       res.json(user);
