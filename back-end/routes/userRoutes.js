@@ -16,5 +16,6 @@ router.post("/reset", auth, userCtrl.resetPassword);
 router.get("/info", auth, userCtrl.getUserInfo);
 router.get("/all_info", auth, authAdmin, userCtrl.getUsersAllInfo);
 router.patch("/update", auth, userCtrl.updateUser);
+router.patch("/update_role/:id", auth, authAdmin, userCtrl.updateUserRole);
 
 module.exports = router;
