@@ -2,7 +2,6 @@ const Users = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendMail = require("./sendMail");
-const sendEmail = require("./sendMail");
 
 const { CLIENT_URL } = process.env;
 
@@ -101,11 +100,10 @@ const userCtrl = {
     try {
       const rf_token = req.cookies.refreshtoken;
       if (!rf_token) return res.status(400).json({ msg: "Please login now!" });
+
       jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) return res.status(400).json({ msg: "Please login now!" });
-        const access_token = createAccessToken({ id: user._id });
-        console.log("from getAccessToken", user);
-
+        const access_token = createAccessToken({ id: user.id });
         res.json({ access_token });
       });
     } catch (err) {
@@ -117,15 +115,17 @@ const userCtrl = {
     try {
       const { email } = req.body;
       const user = await Users.findOne({ email });
-      console.log("forgot", user);
       if (!user)
         return res
           .status(400)
           .json({ msg: "This email doesn't has an account with it" });
 
       const access_token = createAccessToken({ id: user._id });
+
       const url = `${CLIENT_URL}/user/reset/${access_token}`;
-      sendEmail(email, url, "Reset your password");
+
+      sendMail(email, url, "Reset your password");
+
       res.json({ msg: "Reset password, please check you email" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -136,14 +136,12 @@ const userCtrl = {
     try {
       const { password } = req.body;
       const passwordHash = await bcrypt.hash(password, 12);
-      console.log("from reset", req.user);
       await Users.findOneAndUpdate(
         { _id: req.user.id },
         {
           password: passwordHash,
         }
       );
-
       res.json({ msg: "Password successfully changed" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
@@ -161,8 +159,8 @@ const userCtrl = {
 
   getUserInfo: async (req, res) => {
     try {
-      console.log(req);
-      const user = await Users.findById(req.user.id).select("-password");
+      console.log(req.user);
+      const user = await Users.findById(req.user.id);
       // if (!user) return res.status(400).json({ msg: "User does not exist" });
       res.json(user);
     } catch (err) {
@@ -180,14 +178,30 @@ const userCtrl = {
       return res.status(500).json({ msg: err.message });
     }
   },
+
+  updateUser: async (req, res) => {
+    try {
+      const { name, avatar } = req.body;
+      console.log(req.user);
+      await Users.findOneAndUpdate(
+        {
+          _id: req.user.id,
+        },
+        { name, avatar }
+      );
+      res.json({ msg: "Update Success!" });
+    } catch (err) {
+      s;
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 };
 
-const validateEmail = (email) => {
-  return email.match(
-    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  );
-};
-
+function validateEmail(email) {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
 const createActivationToken = (payload) => {
   return jwt.sign(payload, process.env.ACTIVATION_TOKEN_SECRET, {
     expiresIn: "5m",
