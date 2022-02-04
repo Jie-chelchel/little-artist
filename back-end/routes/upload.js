@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const uploadImage = require("../middleware/uploadImage");
+const uploadCtrl = require("../controller/uploadControllers");
 const cloudinary = require("cloudinary");
 const auth = require("../middleware/auth");
 const authAdmin = require("../middleware/authAdmin");
@@ -9,6 +11,8 @@ cloudinary.config({
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
+
+router.post("/upload_avatar", uploadImage, auth, uploadCtrl.uploadAvatar);
 
 //upload image
 router.post("/upload", auth, authAdmin, (req, res) => {

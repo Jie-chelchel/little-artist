@@ -6,7 +6,7 @@ const connectDB = require("./config/db");
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
-const upload = require("./routes/upload");
+const uploadRoutes = require("./routes/upload");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
@@ -24,8 +24,9 @@ app.use(
 
 app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api", upload);
+app.use("/api", uploadRoutes);
 app.use("/user", userRoutes);
+
 app.get("/", (req, res) => {
   res.send("Hello");
 });
