@@ -25,11 +25,42 @@ const uploadCtrl = {
 
           removeTmp(file.tempFilePath);
 
-          console.log({ result });
-
           res.json({ url: result.secure_url });
         }
       );
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  uploadProductImage: (req, res) => {
+    try {
+      const file = req.files.file;
+
+      cloudinary.v2.uploader.upload(
+        file.tempFilePath,
+        {
+          folder: "test",
+        },
+        async (err, result) => {
+          if (err) throw err;
+          removeTmp(file.tempFilePath);
+          res.json({ public_id: result.public_id, url: result.secure_url });
+        }
+      );
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+
+  deleteProductImage: (req, res) => {
+    try {
+      const { public_id } = req.body;
+      if (!public_id) res.status(400).json({ msg: "No images selected" });
+      cloudinary.v2.uploader.destroy(public_id, async (err, result) => {
+        if (err) throw err;
+        res.json({ msg: "Image deleted" });
+      });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
