@@ -20,7 +20,7 @@ function Header() {
       <ul>
         <li>
           <Link to="/">Products</Link>
-        </li>{" "}
+        </li>
         <li>
           <Link to="/login">Login </Link>
         </li>

@@ -1,55 +1,71 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
-
+import { showErrMsg, showSuccessMsg } from "../utils/notification/Notification";
+const initialState = {
+  email: "",
+  password: "",
+  err: "",
+  success: "",
+};
 function Login() {
-  let history = useHistory();
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
+  const [user, setUser] = useState(initialState);
+  const { email, password, err, success } = user;
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setUser({ ...user, [name]: value, err: "", success: "" });
   };
   const loginSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8000/user/login", {
-        ...user,
+      const res = await axios.post("http://localhost:8000/user/login", {
+        email,
+        password,
       });
+      setUser({ ...user, err: "", success: res.data.msg });
       localStorage.setItem("firstLogin", true);
-      window.location.href = "/";
     } catch (err) {
-      alert(err.response.data.msg);
+      err.response.data.msg &&
+        setUser({ ...user, err: err.response.data.msg, success: "" });
     }
   };
 
   return (
     <div className="login-page">
+      <h2>Login</h2>
+
+      {err && showErrMsg(err)}
+      {success && showSuccessMsg(success)}
+
       <form onSubmit={loginSubmit}>
-        <h2>Login</h2>
-        <input
-          type="email"
-          name="email"
-          placeholder="email"
-          value={user.email}
-          required
-          onChange={onChangeInput}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="password"
-          value={user.password}
-          required
-          onChange={onChangeInput}
-        />
+        <div>
+          <label htmlFor="email"> Email Address</label>
+          <input
+            type="email"
+            name="email"
+            value={email}
+            required
+            id="email"
+            onChange={onChangeInput}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password"> Password</label>
+          <input
+            type="password"
+            name="password"
+            value={password}
+            required
+            id="password"
+            onChange={onChangeInput}
+          />
+        </div>
         <div className="btns">
           <button type="submit">Login</button>
-          <Link to="/register"> Register</Link>
+          <Link to="/forgot"> Forgot your password?</Link>
         </div>
       </form>
     </div>
