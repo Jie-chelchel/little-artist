@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
 import { showErrMsg, showSuccessMsg } from "../utils/notification/Notification";
+import { dispatchLogin } from "../../../redux/actions/userActions";
+import { useDispatch } from "react-redux";
+
 const initialState = {
   email: "",
   password: "",
@@ -11,6 +14,8 @@ const initialState = {
 };
 function Login() {
   const [user, setUser] = useState(initialState);
+  const dispatch = useDispatch();
+  const history = useHistory();
   const { email, password, err, success } = user;
 
   const onChangeInput = (e) => {
@@ -26,6 +31,8 @@ function Login() {
       });
       setUser({ ...user, err: "", success: res.data.msg });
       localStorage.setItem("firstLogin", true);
+      dispatch(dispatchLogin());
+      history.push("/");
     } catch (err) {
       err.response.data.msg &&
         setUser({ ...user, err: err.response.data.msg, success: "" });
@@ -68,6 +75,10 @@ function Login() {
           <Link to="/forgot"> Forgot your password?</Link>
         </div>
       </form>
+
+      <p>
+        New Customer? <Link to="/register">Register</Link>{" "}
+      </p>
     </div>
   );
 }

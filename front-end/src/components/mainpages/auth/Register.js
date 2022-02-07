@@ -1,63 +1,129 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import { showErrMsg, showSuccessMsg } from "../utils/notification/Notification";
+import {
+  isEmail,
+  isEmpty,
+  isLength,
+  isMatch,
+} from "../utils/validation/Validation";
 
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  cf_password: "",
+  err: "",
+  success: "",
+};
 function Register() {
-  let history = useHistory();
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const [user, setUser] = useState(initialState);
+
+  const { name, email, password, cf_password, err, success } = user;
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setUser({ ...user, [name]: value, err: "", success: "" });
   };
-  const registerSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:8000/user/register", { ...user });
 
-      localStorage.setItem("firstLogin", true);
-      history.push("/");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isEmpty(name) || isEmpty(password))
+      return setUser({
+        ...user,
+        err: "Please fill in all fields",
+        success: "",
+      });
+    if (!isEmail(email))
+      return setUser({
+        ...user,
+        err: "Invalid emails",
+        success: "",
+      });
+
+    if (isLength(password))
+      return setUser({
+        ...user,
+        err: "Password should be at least 6 characters",
+        success: "",
+      });
+
+    if (!isMatch(password, cf_password))
+      return setUser({
+        ...user,
+        err: "Password did not match",
+        success: "",
+      });
+
+    try {
+      // const res = await axios.post("http://localhost:8000/user/register", {
+      //   email,
+      //   password,
+      // });
     } catch (err) {
-      alert(err.response.data.msg);
+      err.response.data.msg &&
+        setUser({ ...user, err: err.response.data.msg, success: "" });
     }
   };
 
   return (
-    <div className="register-page">
-      <form onSubmit={registerSubmit}>
-        <input
-          type="name"
-          name="name"
-          placeholder="name"
-          value={user.name}
-          required
-          onChange={onChangeInput}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="email"
-          value={user.email}
-          required
-          onChange={onChangeInput}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="password"
-          value={user.password}
-          required
-          onChange={onChangeInput}
-        />
+    <div className="login-page">
+      <h2>Register</h2>
+
+      {err && showErrMsg(err)}
+      {success && showSuccessMsg(success)}
+
+      <form onSubmit={handleSubmit}>
         <div>
-          <button type="submit">register</button>
-          <Link to="/login"> Login</Link>
+          <label htmlFor="name"> Username</label>
+          <input
+            type="name"
+            name="name"
+            value={name}
+            id="name"
+            onChange={onChangeInput}
+          />
+        </div>
+        <div>
+          <label htmlFor="email"> Email Address</label>
+          <input
+            // type="email"
+            name="email"
+            value={email}
+            id="email"
+            onChange={onChangeInput}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password"> Password</label>
+          <input
+            type="password"
+            name="password"
+            value={password}
+            id="password"
+            onChange={onChangeInput}
+          />
+        </div>
+        <div>
+          <label htmlFor="cf_password"> Confirm Password</label>
+          <input
+            type="password"
+            name="cf_password"
+            value={cf_password}
+            id="cf_password"
+            onChange={onChangeInput}
+          />
+        </div>
+        <div className="btns">
+          <button type="submit">Register</button>
         </div>
       </form>
+
+      <p>
+        Already has an account? <Link to="/login">Login</Link>{" "}
+      </p>
     </div>
   );
 }

@@ -43,6 +43,10 @@
   margin-right: 10px;
 }
 
+.login-page p {
+  margin: 10px 0;
+}
+
 .btns a {
   padding: 3px 13px;
   border-radius: 5px;
