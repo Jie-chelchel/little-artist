@@ -57,10 +57,12 @@ function Register() {
       });
 
     try {
-      // const res = await axios.post("http://localhost:8000/user/register", {
-      //   email,
-      //   password,
-      // });
+      const res = await axios.post("http://localhost:8000/user/register", {
+        name,
+        email,
+        password,
+      });
+      setUser({ ...user, err: "", success: res.data.msg });
     } catch (err) {
       err.response.data.msg &&
         setUser({ ...user, err: err.response.data.msg, success: "" });
