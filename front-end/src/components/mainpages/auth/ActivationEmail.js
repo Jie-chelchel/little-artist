@@ -16,7 +16,6 @@ function ActivationEmail() {
             "http://localhost:8000/user/activation",
             { activation_token }
           );
-          console.log(res.data);
           setSuccess(res.data.msg);
         } catch (err) {
           err.response.data.msg && setErr(err.response.data.msg);
