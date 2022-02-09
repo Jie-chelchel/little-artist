@@ -14,7 +14,6 @@ const userCtrl = {
         return res.status(400).json({ msg: "Please fill in all fields" });
 
       if (!validateEmail(email)) {
-        console.log(validateEmail(email));
         return res.status(400).json({ msg: "Invalid email" });
       }
 
@@ -55,7 +54,6 @@ const userCtrl = {
         activation_token,
         process.env.ACTIVATION_TOKEN_SECRET
       );
-      console.log(user);
       const { name, email, password } = user;
 
       const check = await Users.findOne({ email });
@@ -159,7 +157,6 @@ const userCtrl = {
 
   getUserInfo: async (req, res) => {
     try {
-      console.log(req.user);
       const user = await Users.findById(req.user.id);
       // if (!user) return res.status(400).json({ msg: "User does not exist" });
       res.json(user);
@@ -170,8 +167,6 @@ const userCtrl = {
 
   getUsersAllInfo: async (req, res) => {
     try {
-      console.log(req.user);
-
       const users = await Users.find().select("-password");
       res.json(users);
     } catch (err) {
@@ -182,7 +177,6 @@ const userCtrl = {
   updateUser: async (req, res) => {
     try {
       const { name, avatar } = req.body;
-      console.log(req.user);
       await Users.findOneAndUpdate(
         {
           _id: req.user.id,
