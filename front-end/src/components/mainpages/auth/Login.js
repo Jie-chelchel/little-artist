@@ -25,7 +25,7 @@ function Login() {
   const loginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8000/user/login", {
+      const res = await axios.post("user/login", {
         email,
         password,
       });

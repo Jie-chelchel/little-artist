@@ -4,9 +4,18 @@ import menu from "./icon/menu.svg";
 import cart from "./icon/cart.svg";
 import close from "./icon/close.svg";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Header() {
-  const value = useContext(GlobalState);
+  const auth = useSelector((state) => state.auth);
+  const { user, isLoggedIn } = auth;
+  const userLink = () => {
+    return (
+      <li>
+        <img src={user.avatar} alt="user avatar" /> <Link>{user.name}</Link>
+      </li>
+    );
+  };
   return (
     <header>
       <div className="menu">
@@ -21,9 +30,15 @@ function Header() {
         <li>
           <Link to="/">Products</Link>
         </li>
-        <li>
-          <Link to="/login">Login </Link>
-        </li>
+
+        {isLoggedIn ? (
+          userLink()
+        ) : (
+          <li>
+            <Link to="/login">Login </Link>
+          </li>
+        )}
+
         <li>
           <Link to="/register">Register </Link>
         </li>

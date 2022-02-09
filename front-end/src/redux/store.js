@@ -7,9 +7,11 @@ import {
   getProductsReducer,
 } from "./reducers/productReducer";
 import userReducer from "./reducers/userReducers";
+import tokenReducer from "./reducers/tokenReducer";
 
 const reducer = combineReducers({
-  user: userReducer,
+  auth: userReducer,
+  token: tokenReducer,
   cart: cartReducer,
   getProducts: getProductsReducer,
   getProductDetails: getProductDetailsReducer,
