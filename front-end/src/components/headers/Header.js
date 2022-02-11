@@ -12,7 +12,9 @@ function Header() {
   const userLink = () => {
     return (
       <li>
-        <img src={user.avatar} alt="user avatar" /> <Link>{user.name}</Link>
+        <Link to="/">
+          <img src={user.avatar} alt="user avatar" /> {user.name}
+        </Link>
       </li>
     );
   };

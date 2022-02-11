@@ -14,7 +14,13 @@ const userReducer = (state = initialState, action) => {
         isLoggedIn: true,
       };
     }
-
+    case actionTypes.GET_USER: {
+      return {
+        ...state,
+        user: action.payload.user,
+        isLoggedIn: true,
+      };
+    }
     default:
       return state;
   }
