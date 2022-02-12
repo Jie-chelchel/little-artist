@@ -13,7 +13,7 @@ export const fetchUser = async (token) => {
   return res;
 };
 
-export const dispatchGetUser = async (res) => {
+export const dispatchGetUser = (res) => {
   return {
     type: actionTypes.GET_USER,
     payload: {

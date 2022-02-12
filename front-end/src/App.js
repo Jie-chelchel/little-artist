@@ -30,17 +30,18 @@ function App() {
     }
   }, [auth.isLoggedIn, dispatch]);
 
-  // useEffect(() => {
-  //   if (token) {
-  //     const getUser = () => {
-  //       dispatch(dispatchLogin());
-  //       return fetchUser(token).then((res) => {
-  //         dispatch(dispatchGetUser(res));
-  //       });
-  //     };
-  //     getUser();
-  //   }
-  // }, [token, dispatch]);
+  useEffect(() => {
+    if (token) {
+      const getUser = () => {
+        dispatch(dispatchLogin());
+
+        return fetchUser(token).then((res) => {
+          dispatch(dispatchGetUser(res));
+        });
+      };
+      getUser();
+    }
+  }, [token, dispatch]);
 
   return (
     <Router>

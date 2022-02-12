@@ -11,24 +11,35 @@ function Header() {
   const { user, isLoggedIn } = auth;
   const userLink = () => {
     return (
-      <li>
-        <Link to="/">
+      <li className="drop-nav">
+        <Link to="#" className="avata">
           <img src={user.avatar} alt="user avatar" /> {user.name}
+          <i className="fas fa-angle-down"></i>
         </Link>
+        <ul className="dropdown">
+          <li>
+            <Link to="/profile">Profile</Link>
+          </li>
+          <li>
+            <Link to="/">Logout</Link>
+          </li>
+        </ul>
       </li>
     );
   };
+
+  const transForm = {
+    transform: isLoggedIn ? "translateY(-8px)" : 0,
+  };
+
   return (
     <header>
-      <div className="menu">
-        <img src={menu} alt="" width="30" />
-      </div>
       <div className="logo">
         <h1>
           <Link to="/">Little Artists</Link>
         </h1>
       </div>
-      <ul>
+      <ul style={transForm}>
         <li>
           <Link to="/">Products</Link>
         </li>
@@ -38,11 +49,6 @@ function Header() {
         ) : (
           <li>
             <Link to="/login">Login/Sign up </Link>
-          </li>
-        )}
-        {isLoggedIn && (
-          <li>
-            <Link to="/">Logout </Link>
           </li>
         )}
 

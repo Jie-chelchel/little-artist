@@ -18,7 +18,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload.user,
-        isLoggedIn: true,
+        isAdmin: action.payload.isAdmin,
       };
     }
     default:

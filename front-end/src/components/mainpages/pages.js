@@ -7,12 +7,19 @@ import { Switch, Route } from "react-router-dom";
 import NotFound from "./utils/notFound/Notfound";
 import ProductDetail from "./productDetail/ProductDetail";
 import ActivationEmail from "./auth/ActivationEmail";
+import { useSelector } from "react-redux";
 
 function MainPages() {
+  const auth = useSelector((state) => state.auth);
+  const { isLoggedIn } = auth;
   return (
     <Switch>
-      <Route path="/login" exact component={Login} />
-      <Route path="/register" exact component={Register} />
+      <Route path="/login" exact component={isLoggedIn ? NotFound : Login} />
+      <Route
+        path="/register"
+        exact
+        component={isLoggedIn ? NotFound : Register}
+      />
       <Route
         path="/user/activate/:activation_token"
         exact
