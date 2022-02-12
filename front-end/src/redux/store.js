@@ -17,7 +17,7 @@ const reducer = combineReducers({
   getProductDetails: getProductDetailsReducer,
 });
 
-const middlewear = [thunk];
+// const middlewear = [thunk];
 
 const store = createStore(
   reducer,

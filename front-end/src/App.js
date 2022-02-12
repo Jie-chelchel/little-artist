@@ -1,5 +1,5 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import { DataProvider } from "./GlobalState";
+
 import Headers from "./components/headers/Header";
 import MainPages from "./components/mainpages/pages";
 import React, { useEffect } from "react";
@@ -15,14 +15,14 @@ function App() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
   const auth = useSelector((state) => state.auth);
-  console.log(auth);
+
   useEffect(() => {
     const firstLogin = localStorage.getItem("firstLogin");
 
     if (firstLogin) {
       const getToken = async () => {
         const res = await axios.post("/user/refresh_token");
-        console.log(res.data);
+        console.log("token", res.data.access_token);
         dispatch({ type: "GET_TOKEN", payload: res.data.access_token });
       };
 
@@ -30,27 +30,25 @@ function App() {
     }
   }, [auth.isLoggedIn, dispatch]);
 
-  useEffect(() => {
-    if (token) {
-      const getUser = () => {
-        dispatch(dispatchLogin());
-        return fetchUser(token).then((res) => {
-          dispatch(dispatchGetUser(res));
-        });
-      };
-      getUser();
-    }
-  }, [token, dispatch]);
+  // useEffect(() => {
+  //   if (token) {
+  //     const getUser = () => {
+  //       dispatch(dispatchLogin());
+  //       return fetchUser(token).then((res) => {
+  //         dispatch(dispatchGetUser(res));
+  //       });
+  //     };
+  //     getUser();
+  //   }
+  // }, [token, dispatch]);
 
   return (
-    <DataProvider>
-      <Router>
-        <div className="App">
-          <Headers />
-          <MainPages />
-        </div>
-      </Router>
-    </DataProvider>
+    <Router>
+      <div className="App">
+        <Headers />
+        <MainPages />
+      </div>
+    </Router>
   );
 }
 

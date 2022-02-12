@@ -19,10 +19,10 @@ function MainPages() {
         component={ActivationEmail}
       />
 
-      <Route path="/" exact component={Products} />
-      <Route path="/productdetail/:id" exact component={ProductDetail} />
+      {/* <Route path="/" exact component={Products} /> */}
+      {/* <Route path="/productdetail/:id" exact component={ProductDetail} /> */}
 
-      <Route path="/cart" exact component={Cart} />
+      {/* <Route path="/cart" exact component={Cart} /> */}
 
       <Route path="*" exact component={NotFound} />
     </Switch>

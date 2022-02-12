@@ -1,4 +1,4 @@
-import * as actionTypes from "../constants/userConstants";
+import * as actionTypes from "../constants/authConstants";
 
 const initialState = {
   user: [],

@@ -37,13 +37,15 @@ function Header() {
           userLink()
         ) : (
           <li>
-            <Link to="/login">Login </Link>
+            <Link to="/login">Login/Sign up </Link>
+          </li>
+        )}
+        {isLoggedIn && (
+          <li>
+            <Link to="/">Logout </Link>
           </li>
         )}
 
-        <li>
-          <Link to="/register">Register </Link>
-        </li>
         <li>
           <img src={close} alt="" width={"30"} className="menu" />
         </li>

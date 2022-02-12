@@ -1,4 +1,4 @@
-import * as actionTypes from "../constants/userConstants";
+import * as actionTypes from "../constants/authConstants";
 import axios from "axios";
 export const dispatchLogin = () => {
   return {
