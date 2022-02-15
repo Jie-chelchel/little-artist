@@ -1,6 +1,4 @@
-import React, { useState, useContext } from "react";
-import { GlobalState } from "../../GlobalState";
-import menu from "./icon/menu.svg";
+import React from "react";
 import cart from "./icon/cart.svg";
 import close from "./icon/close.svg";
 import { Link } from "react-router-dom";
