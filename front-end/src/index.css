@@ -44,3 +44,6 @@ button {
 
 /* -----login ------- */
 @import url("./components/mainpages/auth/login.css");
+
+/* -----profile ------- */
+@import url("./components/mainpages/profile/profile.css");
