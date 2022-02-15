@@ -2,12 +2,12 @@ import React from "react";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Cart from "./cart/Cart";
-import Products from "./products/Products";
+
 import { Switch, Route } from "react-router-dom";
 import NotFound from "./utils/notFound/Notfound";
-import ProductDetail from "./productDetail/ProductDetail";
 import ActivationEmail from "./auth/ActivationEmail";
 import { useSelector } from "react-redux";
+import ForgotPassword from "./auth/ForgotPassword";
 
 function MainPages() {
   const auth = useSelector((state) => state.auth);
@@ -25,6 +25,7 @@ function MainPages() {
         exact
         component={ActivationEmail}
       />
+      <Route path="/forgot_password" exact component={ForgotPassword} />
 
       {/* <Route path="/" exact component={Products} /> */}
       {/* <Route path="/productdetail/:id" exact component={ProductDetail} /> */}
