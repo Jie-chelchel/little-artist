@@ -5,10 +5,22 @@ import cart from "./icon/cart.svg";
 import close from "./icon/close.svg";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 function Header() {
   const auth = useSelector((state) => state.auth);
   const { user, isLoggedIn } = auth;
+
+  const handleLogout = async () => {
+    try {
+      await axios.get("/user/logout");
+      localStorage.removeItem("firstLogin");
+      window.location.href = "/";
+    } catch (err) {
+      window.location.href = "/";
+    }
+  };
+
   const userLink = () => {
     return (
       <li className="drop-nav">
@@ -21,7 +33,9 @@ function Header() {
             <Link to="/profile">Profile</Link>
           </li>
           <li>
-            <Link to="/">Logout</Link>
+            <Link to="/" onClick={handleLogout}>
+              Logout
+            </Link>
           </li>
         </ul>
       </li>
