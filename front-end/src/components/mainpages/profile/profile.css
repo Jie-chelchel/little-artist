@@ -1,11 +1,10 @@
 .profile_page {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
 }
 
 .profile_page .col-left {
-  width: 400px;
+  width: 50%;
   min-width: 300px;
   padding: 0 10px;
   margin: auto;
@@ -90,7 +89,7 @@
 
 .profile_page .col-right {
   padding: 0 10px;
-  flex: 1;
+  width: 50%;
 }
 
 .profile_page .col-right h2 {
