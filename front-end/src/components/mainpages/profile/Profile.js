@@ -40,7 +40,7 @@ function Profile() {
       if (file.size > 1024 * 1024) {
         return setData({ ...data, err: "File size is too large", success: "" });
       }
-      if (file.mimetype !== "image/jpeg" && file.mimetype !== "image/png") {
+      if (file.type !== "image/jpeg" && file.type !== "image/png") {
         return setData({
           ...data,
           err: "File format has to be .jpeg or .png.",
@@ -123,98 +123,104 @@ function Profile() {
   };
 
   return (
-    <div className="profile_page">
-      <div className="col-left">
-        <h2>{isAdmin ? "Admin Profile" : "User Profile"}</h2>
-        <div className="avatar">
-          <img src={avatar ? avatar : user.avatar} alt="" />
-          <span>
-            <i className="fa fa-camera"></i>
-            <p>Change</p>
-            <input
-              type="file"
-              name="file"
-              id="file_up"
-              onChange={changeAvatar}
-            />
-          </span>
-        </div>
+    <>
+      <div>
         {err && showErrMsg(err)}
         {success && showSuccessMsg(success)}
-        <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            defaultValue={user.name}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            defaultValue={user.email}
-            disabled
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="Password">New Password</label>
-          <input
-            type="password"
-            name="password"
-            id="Password"
-            value={password}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="cf_password">Confirm New Password</label>
-          <input
-            type="password"
-            name="cf_password"
-            id="cf_password"
-            value={cf_password}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <em style={{ color: "crimson" }}>
-            * if you update your password here, you will not be able to login
-            using google and facebook.
-          </em>
-        </div>
-        <button disabled={loading} onClick={handleUpdate}>
-          Update
-        </button>
+        {loading && <h3>Loading.....</h3>}
       </div>
-      <div className="col-right">
-        <h2>{isAdmin ? "Users" : "My orders"}</h2>
-        <div style={{ overflowX: "auto" }}>
-          <table className="customers">
-            <thread>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Admin</th>
-                <th>Action</th>
-              </tr>
-            </thread>
-            <tbody>
-              <td>Id</td>
-              <td>Name</td>
-              <td>Email</td>
-              <td>Admin</td>
-              <td>Action</td>
-            </tbody>
-          </table>
+      <div className="profile_page">
+        <div className="col-left">
+          <h2>{isAdmin ? "Admin Profile" : "User Profile"}</h2>
+          <div className="avatar">
+            <img src={avatar ? avatar : user.avatar} alt="" />
+            <span>
+              <i className="fa fa-camera"></i>
+              <p>Change</p>
+              <input
+                type="file"
+                name="file"
+                id="file_up"
+                onChange={changeAvatar}
+              />
+            </span>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              defaultValue={user.name}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              defaultValue={user.email}
+              disabled
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="Password">New Password</label>
+            <input
+              type="password"
+              name="password"
+              id="Password"
+              value={password}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="cf_password">Confirm New Password</label>
+            <input
+              type="password"
+              name="cf_password"
+              id="cf_password"
+              value={cf_password}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <em style={{ color: "crimson" }}>
+              * if you update your password here, you will not be able to login
+              using google and facebook.
+            </em>
+          </div>
+          <button disabled={loading} onClick={handleUpdate}>
+            Update
+          </button>
+        </div>
+        <div className="col-right">
+          <h2>{isAdmin ? "Users" : "My orders"}</h2>
+          <div style={{ overflowX: "auto" }}>
+            <table className="customers">
+              <thread>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Admin</th>
+                  <th>Action</th>
+                </tr>
+              </thread>
+              <tbody>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Email</td>
+                <td>Admin</td>
+                <td>Action</td>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
