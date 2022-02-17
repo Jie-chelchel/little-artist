@@ -1,10 +1,11 @@
 .profile_page {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .profile_page .col-left {
-  width: 50%;
+  max-width: 400px;
   min-width: 300px;
   padding: 0 10px;
   margin: auto;
@@ -89,7 +90,8 @@
 
 .profile_page .col-right {
   padding: 0 10px;
-  width: 50%;
+  flex: 1;
+  min-width: 300px;
 }
 
 .profile_page .col-right h2 {
@@ -101,7 +103,7 @@
 
 .customers {
   border-collapse: collapse;
-  width: 100%;
+  width: 90%;
 }
 
 .customers td,
@@ -112,12 +114,36 @@
 }
 
 .customers tr:nth-child(even) {
-  background-color: aquamarine;
+  background-color: rgb(241, 221, 220);
 }
 
 .customers th {
   padding: 12px 0;
-  text-align: left;
+  text-align: center;
   background-color: #555;
   color: white;
+}
+
+.customers i {
+  cursor: pointer;
+}
+
+.customers .fa-check {
+  color: green;
+}
+
+.customers .fa-times {
+  color: red;
+}
+
+.customers .fa-edit {
+  padding: 7px;
+  color: #777;
+  font-size: 12px;
+}
+
+.customers .fa-trash-alt {
+  color: red;
+  padding: 7px;
+  font-size: 12px;
 }
