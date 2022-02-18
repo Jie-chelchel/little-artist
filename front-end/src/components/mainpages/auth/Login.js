@@ -5,6 +5,7 @@ import "./login.css";
 import { showErrMsg, showSuccessMsg } from "../utils/notification/Notification";
 import { dispatchLogin } from "../../../redux/actions/userActions";
 import { useDispatch } from "react-redux";
+import GoogleLogin from "react-google-login";
 
 const initialState = {
   email: "",
@@ -30,6 +31,23 @@ function Login() {
         password,
       });
       setUser({ ...user, err: "", success: res.data.msg });
+      localStorage.setItem("firstLogin", true);
+      dispatch(dispatchLogin());
+      history.push("/");
+    } catch (err) {
+      err.response.data.msg &&
+        setUser({ ...user, err: err.response.data.msg, success: "" });
+    }
+  };
+
+  const responseGoogle = async (response) => {
+    console.log(response);
+    try {
+      const res = await axios.post("/user/google_login", {
+        tokenId: response.tokenId,
+      });
+      setUser({ ...user, err: "", success: res.data.msg });
+
       localStorage.setItem("firstLogin", true);
       dispatch(dispatchLogin());
       history.push("/");
@@ -76,6 +94,16 @@ function Login() {
         </div>
       </form>
 
+      <div className="hr">Or Login With</div>
+      <div className="social">
+        <GoogleLogin
+          clientId="831358997310-enii6d97pdqqbcfg9v64mokco46rfma8"
+          buttonText="Login with Google"
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={"single_host_origin"}
+        />
+      </div>
       <p>
         New Customer? <Link to="/register">Register</Link>{" "}
       </p>
