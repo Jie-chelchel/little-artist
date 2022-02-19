@@ -4,10 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "cd back-end && node server.js",
     "server": "nodemon back-end/server.js --ignore  front-end",
     "client": "cd front-end && npm run start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "data:import": "node back-end/seederScript.js"
+    "data:import": "node back-end/seederScript.js",
+    "heroku-postbuild": "cd front-end && npm install && npm run build"
   },
   "keywords": [],
   "author": "",
