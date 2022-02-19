@@ -11,6 +11,7 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const { aggregate } = require("./models/userModel");
 
 connectDB();
 const app = express();
@@ -31,6 +32,14 @@ app.use("/user", userRoutes);
 app.get("/", (req, res) => {
   res.send("Hello");
 });
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("front-end/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "front-end", "build", "index.html"));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
