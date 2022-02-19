@@ -114,7 +114,7 @@ function Login() {
         </div>
       </form>
 
-      <div className="hr">Or Login With</div>
+      <div className="login_with">Or Login With</div>
       <div className="social">
         <GoogleLogin
           clientId="831358997310-enii6d97pdqqbcfg9v64mokco46rfma8"

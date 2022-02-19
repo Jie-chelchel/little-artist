@@ -95,3 +95,21 @@
   letter-spacing: 1.3px;
   margin-top: 15px;
 }
+
+/* ------gb google login-------- */
+
+.login-page .login_with {
+  margin-top: 35px;
+  color: crimson;
+}
+
+.login-page .social button {
+  width: 100%;
+  margin: 10px 0;
+  height: 50px;
+  font-size: 14px;
+  font-weight: 250;
+  text-transform: capitalize;
+  letter-spacing: 1.3px;
+  box-shadow: 0 2px 4px #777;
+}

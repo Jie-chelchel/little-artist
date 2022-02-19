@@ -10,6 +10,7 @@ const uploadRoutes = require("./routes/upload");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 connectDB();
 const app = express();
